@@ -1,0 +1,39 @@
+# 模拟查看数据库信息
+GET http://localhost:5050/users
+
+### 模拟用户注册
+POST http://localhost:5050/users
+Content-Type: application/json
+    
+{
+    "name": "John Doe",
+    "password": "xxxx"
+}
+
+
+### 模拟用户登录
+POST http://localhost:5050/users/login
+Content-Type: application/json
+    
+{
+    "name": "John Doe",
+    "password": "xxxx"
+}
+
+### 模拟错误信息❌登录
+POST http://localhost:5050/users/login
+Content-Type: application/json
+    
+{
+    "name": "John Doe",
+    "password": "xxxxx"
+}
+
+### 模拟未知用户❌登录
+POST http://localhost:5050/users/login
+Content-Type: application/json
+    
+{
+    "name": "John Dan",
+    "password": "xxxx"
+}
