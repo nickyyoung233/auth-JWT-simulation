@@ -1,0 +1,30 @@
+# 
+GET http://localhost:3000/
+
+
+### 模拟不存在数据的用户登录🚪 ----------------在 4000 端口服务器上
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "username": "Rayn"
+}
+### 模拟不存在数据的用户退出登录🚪 ----------------在 4000 端口服务器上
+DELETE http://localhost:4000/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUmF5biIsImlhdCI6MTcxNTM4NjQxNX0.VQ0GvQigY23a1QSoj3l2_P6ZnvGwdGEvv0CcXMdeN3c"
+}
+### 模拟Nicky-access失效重新获取token⌛️ ----------------在 4000 端口服务器上
+POST http://localhost:4000/token
+Content-Type: application/json
+
+{
+    "username": "Rayn",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUmF5biIsImlhdCI6MTcxNTM4NjQxNX0.VQ0GvQigY23a1QSoj3l2_P6ZnvGwdGEvv0CcXMdeN3c"
+}
+
+### 模拟Nicky获取数据库数据📊----------------在 3000 端口服务器上
+GET http://localhost:3000/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUmF5biIsImlhdCI6MTcxNTM4NjQ1MCwiZXhwIjoxNzE1Mzg2NDY1fQ.Oa3XAAj7nq0UfyWGOjJKszsUCqjqNQNyY7ZIQCnn6Bo
