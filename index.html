@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+
+
+<body>
+  <form onsubmit="return submitHandler()">
+    <div>
+      <label for="username">用户名：</label>
+      <input type="text" id="username">
+    </div>
+    <div>
+      <label for="pwd">密码：</label>
+      <input type="password" id="pwd">
+    </div>
+    <button id="btn" onclick="login()">login</button>
+  </form>
+
+  <div>
+    <button id="post" onclick="getPostHandler()">getPost</button>
+
+  </div>
+  <div style="width: 100vw; height:300px; background-color: rebeccapurple;color:#fff;" id="context"></div>
+  <script>
+    function submitHandler(e) {
+      return false
+    }
+  </script>
+  <script type="module">
+    import Cookies from "js-cookie";
+
+    function getCookie(name) {
+      var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+      if (arr = document.cookie.match(reg))
+
+        return unescape(arr[2]);
+      else
+        return null;
+    }
+
+    function setCookie(name, value) {
+      var Days = 30;
+      var exp = new Date();
+      exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+      // document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+      document.cookie = name + "=" + escape(value);
+    }
+
+    async function login() {
+      const res = await fetch('http://localhost:4000/login', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          username: document.getElementById('username').value,
+          password: document.getElementById('pwd').value
+        }),
+      })
+      //前端写入cookie方案一 三方包js-cookie：
+      // Cookies.set('accessToken', data.accessToken)
+      // Cookies.set('refreshToken', data.refreshToken)
+
+      //前端写入cookie方案二 自定义函数：
+      // setCookie('accessToken', data.accessToken)
+      // setCookie('refreshToken', data.refreshToken)
+
+      //前端写入cookie方案三 原生：
+      // document.cookie = `accessToken=${data.accessToken}`
+      // document.cookie = `refreshToken=${data.refreshToken}`
+    }
+
+    async function getPostHandler() {
+      const res = await fetch('http://localhost:3000/posts', {
+        method: 'GET',
+        // headers: {
+        //   'Authorization': `Bearer ${getCookie('accessToken')}`
+        // },
+        credentials: "include",
+      })
+      if (res.status === 401) {
+        console.log('没有权限')
+        getToken()
+      } else if (res.status === 403) {
+        console.log('请重新登录')
+      } else if (res.status === 200) {
+        console.log('获取成功')
+        const data = await res.json()
+        document.getElementById('context').innerText = data?.[0]?.content
+      }
+    }
+
+    async function getToken() {
+      const res = await fetch('http://localhost:4000/token', {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include"
+        // body: JSON.stringify({
+        //   token: getCookie('refreshToken'),
+        // }),
+      })
+      const data = await res.json()
+      console.log('getToken---', data);
+      if (data.accessToken) {
+        setCookie('accessToken', data.accessToken)
+        getPostHandler()
+      }
+    }
+
+    window.login = login
+    window.getPostHandler = getPostHandler
+  </script>
+</body>
+
+</html>

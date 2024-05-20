@@ -7,18 +7,23 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "auth": "nodemon auth-server.js",
     "dev": "nodemon server.js",
-    "JWT": "nodemon JWTAuthServer.js"
+    "JWT": "nodemon JWTAuthServer.js",
+    "start": "wds --node-resolve --open --watch --port 5500"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "@web/dev-server": "^0.4.5",
+    "cors": "^2.8.5",
     "nodemon": "^3.1.0"
   }
 }
