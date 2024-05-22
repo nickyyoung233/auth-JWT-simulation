@@ -12,7 +12,7 @@ app.get("/users", (req, res) => {
   res.json(users);
 });
 
-app.post("/users", async (req, res) => {
+app.post("/users/registry", async (req, res) => {
   // 理解 bcrypt
   try {
     //方案1
